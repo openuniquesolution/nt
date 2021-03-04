@@ -7,10 +7,6 @@ from datetime import date, time
 import subprocess as sp
 from jproperties import Properties
 
-
-MAIN_FOLDER_PATH = "/home/ayushagrawal/notes"
-properties = ""
-
 def setup():
     propoerty_file = "application.properties"
     config = Properties()
@@ -19,8 +15,13 @@ def setup():
         config.load(_file)
         global extention
         global editor
-        extention = "."+config["file_type"].data if(config['file_type'].data is not None) else ".md"
-        editor = config["editor"].data if(config['editor'].data is not None) else "vim"
+        global author
+        global MAIN_FOLDER_PATH 
+        MAIN_FOLDER_PATH = config.get("base.folder").data if(config.get('base.folder') is not None) else "/home/ayushagrawal/notes"
+        MAIN_FOLDER_PATH = "/home/ayushagrawal/notes"
+        extention = "."+config.get("file_type").data if(config.get('file_type') is not None) else ".md"
+        editor = config.get("editor").data if(config.get('editor') is not None) else "vim"
+        author = config.get("author").data if(config.get('author') is not None) else ""
 
 def read_args():
     parser = argparse.ArgumentParser()
@@ -39,6 +40,7 @@ def read_args():
     open_parser.add_argument("file_name", help="file name to open")
     open_parser.add_argument("-b", "--book", help="Book for note", default="")
     open_parser.add_argument("-t", "--topic", help="Topic for note", default="")
+    open_parser.add_argument("-a", "--author", help="Autor of the document", default="")
 
     return parser.parse_args()
 
@@ -56,9 +58,10 @@ def open_file_not_exist(_file, book, topic):
     if(not os.path.exists(_dir)):
         os.makedirs(_dir)
 
+    author = parsed.author if(parsed.author != "") else "Ayush Agrawal"
     os.chdir(_dir)
     with open(_file+extention, 'w') as f:
-        f.write("Date: " + str(date.today) + "\nAuthor: Ayush Agrawal\nBook: " + book + "\nTopic: "+topic)
+        f.write("Date: " + str(date.today) + "\nAuthor: "+author+"\nBook: " + book + "\nTopic: "+topic + "\n\n\n---\n")
 
 def save_file():
     # git_message = parsed.message if(parsed.message is not None) else "Adding commit"
