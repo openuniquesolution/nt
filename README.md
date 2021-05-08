@@ -42,6 +42,12 @@ positional arguments:
 
     file_name   Name of the file  
 
+optional arguments:
+
+    -h, --help            show this help message and exit
+    -e EXTENTION, --extention EXTENTION
+                        Extention for note
+
 ---   
 ### __Open Command Argument__  
 
@@ -55,10 +61,14 @@ optional arguments:
 
     -h, --help            show this help message and exit
     -b BOOK, --book BOOK  Book for note
+    -e EXTENTION, --extention EXTENTION
+                          Extention for note
+    -d EDITOR, --editor EDITOR
+                        Extention for note
     -t TOPIC, --topic TOPIC
                           Topic for note
     -a AUTHOR, --author AUTHOR
-                          Autor of the document
+                        Autor of the document
 ---    
 ### __Save Command Argument__   
 

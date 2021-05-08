@@ -33,9 +33,10 @@ def read_args(details_dict):
     open_parser.add_argument("file_name", help="file name to open")
     open_parser.add_argument("-b", "--book", help="Book for note", default="")
     open_parser.add_argument("-e", "--extention", help="Extention for note", default=details_dict['file_type'])
+    open_parser.add_argument("-d", "--editor",help="Extention for note", default=details_dict['editor'])
     open_parser.add_argument("-t", "--topic", help="Topic for note", default="")
     open_parser.add_argument("-a", "--author", help="Autor of the document", default=details_dict['author'])
-
+    
     return parser.parse_args()
 
 
@@ -61,9 +62,7 @@ def save_file():
     pass
 
 
-def open_file(_file, _book, _topic, _author, _extention):
-    print(_author)
-    print(_extention)
+def open_file(_file, _book, _topic, _author, _extention, editor):
     file_path = MAIN_FOLDER_PATH + "/" + _book + "/"+_file+"."+_extention
     if(not os.path.exists(file_path)):
         open_file_not_exist(_file, _book, _topic,_author,  _extention)
@@ -74,7 +73,7 @@ def main(parsed):
         if(parsed.command == "find"):
             find_file(parsed.file_name, parsed.extention)
         if(parsed.command == "open"):
-            open_file(parsed.file_name, parsed.book, parsed.topic, parsed.author, parsed.extention)
+            open_file(parsed.file_name, parsed.book, parsed.topic, parsed.author, parsed.extention, parsed.editor)
         if(parsed.command == 'save'):
             save_file()
 
@@ -83,8 +82,6 @@ def main(parsed):
 if __name__ == "__main__":
     details_dict = setup()
     global MAIN_FOLDER_PATH
-    global editor 
-    editor = details_dict['editor']
     MAIN_FOLDER_PATH = details_dict['base.folder']
     parsed = read_args(details_dict)
     main(parsed)
