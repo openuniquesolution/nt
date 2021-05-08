@@ -26,8 +26,8 @@ def read_args(details_dict):
 
     
     save_parser = subparser.add_parser("save", help="save file/s in Git repo of your choice")
-    save_parser.add_argument("-m","--message" ,help="Commit messgage for changes")
-    save_parser.add_argument("-f","--file", help="specific file you want to commit")
+    save_parser.add_argument("-m","--message" ,help="Commit messgage for changes", default="Adding new Commit in notes")
+    save_parser.add_argument("-f","--file", help="specific file you want to commit", default=".")
 
     open_parser = subparser.add_parser("open", help="Open file or create new if not exist.")
     open_parser.add_argument("file_name", help="file name to open")
@@ -42,13 +42,13 @@ def read_args(details_dict):
 
 def find_file(_file, extention):
     _file = _file+"."+extention
-    for root, _, files in os.walk(details_dict['base.folder']):
+    for root, _, files in os.walk(MAIN_FOLDER_PATH):
         if(_file in files):
             print(root + "/" +_file)
 
 
 def open_file_not_exist(_file, book, topic, author, extention):
-    _dir = details_dict['base.folder'] + "/" + book 
+    _dir = MAIN_FOLDER_PATH+ "/" + book 
     
     if(not os.path.exists(_dir)):
         os.makedirs(_dir)
@@ -57,9 +57,9 @@ def open_file_not_exist(_file, book, topic, author, extention):
     with open(_file+"."+extention, 'w') as f:
         f.write("Date: " + str(date.today) + "\nAuthor: "+author+"\nBook: " + book + "\nTopic: "+topic + "\n\n\n---\n")
 
-def save_file():
-    # git_message = parsed.message if(parsed.message is not None) else "Adding commit"
-    pass
+def save_file(_file, message):
+    _dir = os.path.dirname(os.path.realpath(__file__))
+    sp.call(_dir+"/save_file.sh " + MAIN_FOLDER_PATH+" "+_file + " "+ message, shell= True)
 
 
 def open_file(_file, _book, _topic, _author, _extention, editor):
@@ -75,7 +75,10 @@ def main(parsed):
         if(parsed.command == "open"):
             open_file(parsed.file_name, parsed.book, parsed.topic, parsed.author, parsed.extention, parsed.editor)
         if(parsed.command == 'save'):
-            save_file()
+            save_file(
+                _file = parsed.file,
+                message = parsed.message
+            )
 
 
 
