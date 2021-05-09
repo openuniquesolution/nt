@@ -8,7 +8,26 @@ This gives you a power to search, create and open your notes using command line,
 
 ## __Install__   
 
+It is very Easy to install in your system where bash is running, follow below mention steps:
 
+1. clone git repository  
+2. cd inside folder  
+3. run setup.sh (bash one)  
+4. It ask few question, Please provide answer:-  
+    1. default extention (Like md, txt, adoc)  
+    2. default editor (Like code, vim , gedit [able to open using commandline])  
+    3. default base folder(Where you want to put your note in your system [Please Provide full path starting from /home/....])  
+    4. default author (Like :your name)   
+    5. git repository URL where you want to save your note in git.  
+
+Done  
+Now you can use it using __nt__ 
+
+eg: 
+
+    nt -h
+    nt find data  
+    nt open -b data data  
 
 ---   
 
