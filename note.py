@@ -7,11 +7,11 @@ from datetime import date, time
 import subprocess as sp
 import configparser
 
-
+base_dir = os.path.dirname(os.path.realpath(__file__))
 
 def setup():
     config = configparser.RawConfigParser()
-    config.read('./application.properties')
+    config.read(base_dir+'/application.properties')
     details_dict = dict(config.items('SECTION_NAME'))
     return details_dict
 
@@ -58,8 +58,8 @@ def open_file_not_exist(_file, book, topic, author, extention):
         f.write("Date: " + str(date.today) + "\nAuthor: "+author+"\nBook: " + book + "\nTopic: "+topic + "\n\n\n---\n")
 
 def save_file(_file, message):
-    _dir = os.path.dirname(os.path.realpath(__file__))
-    sp.call(_dir+"/save_file.sh " + MAIN_FOLDER_PATH+" "+_file + " "+ message, shell= True)
+    
+    sp.call(base_dir+"/save_file.sh " + MAIN_FOLDER_PATH+" "+_file + " "+ message, shell= True)
 
 
 def open_file(_file, _book, _topic, _author, _extention, editor):
