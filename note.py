@@ -23,6 +23,7 @@ def read_args(details_dict):
     find_parser = subparser.add_parser("find", help="find a file in your main application")
     find_parser.add_argument("file_name", help="Name of the file")
     find_parser.add_argument("-e", "--extention", help="Extention for note", default=details_dict['file_type'])
+    find_parser.add_argument("-b", "--book", help="book name for searching all files exist", default="")
 
     
     save_parser = subparser.add_parser("save", help="save file/s in Git repo of your choice")
@@ -40,11 +41,18 @@ def read_args(details_dict):
     return parser.parse_args()
 
 
-def find_file(_file, extention):
+def find_file(_file, extention, book):
+
+    search_folder  = MAIN_FOLDER_PATH if book == "" else  MAIN_FOLDER_PATH  +"/"+ book 
+
     _file = _file+"."+extention
-    for root, _, files in os.walk(MAIN_FOLDER_PATH):
-        if(_file in files):
-            print(root + "/" +_file)
+    for root, _, files in os.walk(search_folder):
+        if(_file == "_."+extention):
+            for inner_file in files:
+                print(inner_file)
+        else:
+            if(_file in files):
+                print(root + "/" +_file)
 
 
 def open_file_not_exist(_file, book, topic, author, extention):
@@ -71,7 +79,7 @@ def open_file(_file, _book, _topic, _author, _extention, editor):
 
 def main(parsed):
         if(parsed.command == "find"):
-            find_file(parsed.file_name, parsed.extention)
+            find_file(parsed.file_name, parsed.extention, parsed.book)
         if(parsed.command == "open"):
             open_file(parsed.file_name, parsed.book, parsed.topic, parsed.author, parsed.extention, parsed.editor)
         if(parsed.command == 'save'):
