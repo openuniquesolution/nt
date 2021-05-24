@@ -3,7 +3,7 @@
 import argparse
 import sys
 import os
-from datetime import date, time
+import datetime
 import subprocess as sp
 import configparser
 
@@ -11,7 +11,7 @@ base_dir = os.path.dirname(os.path.realpath(__file__))
 
 def setup():
     config = configparser.RawConfigParser()
-    config.read(base_dir+'/application.properties')
+    config.read(base_dir+'/_application.properties')
     details_dict = dict(config.items('SECTION_NAME'))
     return details_dict
 
@@ -63,7 +63,7 @@ def open_file_not_exist(_file, book, topic, author, extention):
 
     os.chdir(_dir)
     with open(_file+"."+extention, 'w') as f:
-        f.write("Date: " + str(date.today) + "\nAuthor: "+author+"\nBook: " + book + "\nTopic: "+topic + "\n\n\n---\n")
+        f.write("Date: " + str(datetime.datetime.now()).split(" ")[0] + "  \nAuthor: "+author+"  \nBook: " + book + "  \nTopic: "+topic + "\n\n\n---\n")
 
 def save_file(_file, message):
     
