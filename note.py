@@ -21,7 +21,7 @@ def read_args(details_dict):
     subparser = parser.add_subparsers(dest="command")
 
     find_parser = subparser.add_parser("find", help="find a file in your main application")
-    find_parser.add_argument("file_name", help="Name of the file")
+    find_parser.add_argument("-f", "--file_name", help="Name of the file", default="_")
     find_parser.add_argument("-e", "--extention", help="Extention for note", default=details_dict['file_type'])
     find_parser.add_argument("-b", "--book", help="book name for searching all files exist", default="")
 
@@ -46,13 +46,17 @@ def find_file(_file, extention, book):
     search_folder  = MAIN_FOLDER_PATH if book == "" else  MAIN_FOLDER_PATH  +"/"+ book 
 
     _file = _file+"."+extention
-    for root, _, files in os.walk(search_folder):
+    for root, dir, files in os.walk(search_folder):
+        if ".git" in dir : 
+            dir.remove('.git')
+        folder = root.split("/")[-1];
+        print(folder)
         if(_file == "_."+extention):
             for inner_file in files:
-                print(inner_file)
+                print("\t"+ inner_file)
         else:
             if(_file in files):
-                print(root + "/" +_file)
+                print(folder + "\n\t" +_file)
 
 
 def open_file_not_exist(_file, book, topic, author, extention):
