@@ -1,2 +1,4 @@
 application.properties
 _application.properties
+__pycache__
+*/__pycache__

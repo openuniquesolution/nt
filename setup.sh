@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir ~/.note
-cp -r * ~/.note/
+cp -r . ~/.note/
 cd ~/.note
 touch application.properties
 echo -e "[SECTION_NAME]" >> application.properties

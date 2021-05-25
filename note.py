@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 
 import argparse
-import sys
 import os
-import datetime
-import subprocess as sp
 import configparser
+from scripts.find import find
+from scripts.open_file import *
+from scripts.save_file import *
 
 base_dir = os.path.dirname(os.path.realpath(__file__))
 
 def setup():
     config = configparser.RawConfigParser()
-    config.read(base_dir+'/_application.properties')
+    config.read(base_dir+'/application.properties')
     details_dict = dict(config.items('SECTION_NAME'))
     return details_dict
 
@@ -41,55 +41,18 @@ def read_args(details_dict):
     return parser.parse_args()
 
 
-def find_file(_file, extention, book):
-
-    search_folder  = MAIN_FOLDER_PATH if book == "" else  MAIN_FOLDER_PATH  +"/"+ book 
-
-    _file = _file+"."+extention
-    for root, dir, files in os.walk(search_folder):
-        if ".git" in dir : 
-            dir.remove('.git')
-        folder = root.split("/")[-1];
-        print(folder)
-        if(_file == "_."+extention):
-            for inner_file in files:
-                print("\t"+ inner_file)
-        else:
-            if(_file in files):
-                print(folder + "\n\t" +_file)
 
 
-def open_file_not_exist(_file, book, topic, author, extention):
-    _dir = MAIN_FOLDER_PATH+ "/" + book 
-    
-    if(not os.path.exists(_dir)):
-        os.makedirs(_dir)
 
-    os.chdir(_dir)
-    with open(_file+"."+extention, 'w') as f:
-        f.write("Date: " + str(datetime.datetime.now()).split(" ")[0] + "  \nAuthor: "+author+"  \nBook: " + book + "  \nTopic: "+topic + "\n\n\n---\n")
-
-def save_file(_file, message):
-    
-    sp.call(base_dir+"/save_file.sh " + MAIN_FOLDER_PATH+" "+_file + " "+ message, shell= True)
-
-
-def open_file(_file, _book, _topic, _author, _extention, editor):
-    file_path = MAIN_FOLDER_PATH + "/" + _book + "/"+_file+"."+_extention
-    if(not os.path.exists(file_path)):
-        open_file_not_exist(_file, _book, _topic,_author,  _extention)
-
-    sp.call(editor + " " +file_path, shell=True)
 
 def main(parsed):
         if(parsed.command == "find"):
-            find_file(parsed.file_name, parsed.extention, parsed.book)
+            find(args=parsed, MAIN_FOLDER_PATH=MAIN_FOLDER_PATH)
         if(parsed.command == "open"):
-            open_file(parsed.file_name, parsed.book, parsed.topic, parsed.author, parsed.extention, parsed.editor)
+            open_file(parsed, MAIN_FOLDER_PATH)
         if(parsed.command == 'save'):
             save_file(
-                _file = parsed.file,
-                message = parsed.message
+                parsed, MAIN_FOLDER_PATH
             )
 
 
